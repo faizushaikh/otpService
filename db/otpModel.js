@@ -7,7 +7,6 @@ const mongoose = require("mongoose");
 const OtpSchema = new mongoose.Schema(
 
  {
-
   mobile: { type: String ,index: true },
 
   otpValue: { type: String },
