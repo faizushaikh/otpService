@@ -30,7 +30,6 @@ const OtpSchema = new mongoose.Schema(
 
 
 
-module.exports = mongoose.model("otp", OtpSchema);
-
+module.exports = mongoose.model("otp", OtpSchema)
 
 

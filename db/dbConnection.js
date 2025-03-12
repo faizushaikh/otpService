@@ -2,7 +2,7 @@
 const mongoose = require('mongoose');
 
 // MongoDB connection string (replace <dbname> with your database name)
-const dbURI = 'mongodb://localhost:27017/<dbname>';
+const dbURI = 'mongodb://localhost:27017/admin';
 
 const connectDB = async () => {
   try {
