@@ -1,15 +1,12 @@
 const express = require('express')
 const router = express.Router()
+const { sendOtp } = require('../service/otpService')
 
 
 
+router.post("/sendOtp",sendOtp)
 
-router.get("/sendOtp",(req,res)=>{
-    res.status(200).json({
-        message:"hello"
-    })
-})
-
+router.post("/verifyOtp",sendOtp)
 
 module.exports = router;
 
