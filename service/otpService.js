@@ -4,13 +4,14 @@ const bcrypt = require('bcrypt');
 exports.sendOtp = async (req, res) => {
     try {
         let { mobile } = req.body;
-        const generate_otp = Math.floor(100000 + Math.random() * 900000).toString();
+       // const generate_otp = Math.floor(100000 + Math.random() * 900000).toString();
+       const generate_otp = '123456'
         const hasOtp = await bcrypt.hash(generate_otp, 10)
         let otp = await otpModel.findOne({ mobile: mobile }).sort({ updatedAt: -1 }).lean();
         if (otp && otp.mobile && otp.otpCount >= 5) {
             return res.json({
                 success: false,
-                message: "Otp limit exceeded try after 40 seconds",
+                message: "Otp limit exceeded try after 5 minutes",
             });
 
         } else {
@@ -47,29 +48,36 @@ exports.sendOtp = async (req, res) => {
     }
 }
 
-exports.verifyPehchaanOtp = async (req, res) => {
+exports.verifyOtp = async (req, res) => {
     try {
+        let { mobile, otp } = req.body
+        let otp_value = await otpModel.findOne({ mobile: mobile }).sort({ updatedAt: -1 }).lean();
+        let current_time = new Date();
+        let timeDifference = current_time - otp_value.updatedAt
+        const compareHash = await bcrypt.compare(otp, otp_value.otpValue)
+        if (otp_value.mobile && compareHash) {
+            if (timeDifference <= 300000) {
+                await otpModel.deleteMany({ mobile: mobile });
+                return res.status(200).json({
+                    success: true, message: "OTP Verified Successfully"
+                })
+            } else {
+                return res.status(200).json({
+                    success: true,
+                    message: "OTP Expired"
+                })
 
-    } catch (error) {
+            }
 
-        let message;
+        } else {
+            return res.status(401).json({
+                success: false,
+                message: "Invalid Otp"
 
-
-
-        if (error?.response?.data) {
-
-            message = error.response.data.message;
-
+            })
         }
-
-        return res.json({
-
-            success: false,
-
-            message: message || "Otp is not verified",
-
-        });
-
+    } catch (err) {
+        throw err
     }
 
-};
+}

@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 
 const OtpSchema = new mongoose.Schema(
     {
-        mobile: { type: String, index: true },
+        mobile: { type: String },
         otpValue: { type: String },
         otpCount: { type: Number }
     },
@@ -13,7 +13,7 @@ const OtpSchema = new mongoose.Schema(
 
 );
 
-OtpSchema.index({ createdAt: 1 }, { expireAfterSeconds: 40 }); // 300 seconds = 5 minutes
+OtpSchema.index({ createdAt: 1 }, { expireAfterSeconds: 300 }); // 300 seconds = 5 minutes
 
 module.exports = mongoose.model("otp", OtpSchema)
 

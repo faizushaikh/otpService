@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const { sendOtp } = require('../service/otpService')
+const { sendOtp ,verifyOtp } = require('../service/otpService')
 const rateLimit = require('express-rate-limit');
 const RedisStore = require('rate-limit-redis');
 const Redis = require('ioredis');
@@ -18,7 +18,7 @@ const redisClient = new Redis({
       expiry: 60 * 15, // Store data for 15 minutes
     }),
     windowMs: 60 * 1000, // 1 minute in milliseconds
-    max: 2,  // Limit each IP to 2 requests per minute
+    max: 7,  // Limit each IP to 7 requests per minute
     message: 'Too many requests, please try again later.',
     standardHeaders: true,
     legacyHeaders: false,
@@ -26,7 +26,7 @@ const redisClient = new Redis({
   
 router.post("/sendOtp",limiter,sendOtp)
 
-router.post("/verifyOtp",sendOtp)
+router.post("/verifyOtp",verifyOtp)
 
 module.exports = router;
 
