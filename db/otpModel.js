@@ -27,7 +27,7 @@ const OtpSchema = new mongoose.Schema(
 
 );
 
-
+OtpSchema.index({ createdAt: 1 }, { expireAfterSeconds: 300 }); // 300 seconds = 5 minutes
 
 module.exports = mongoose.model("otp", OtpSchema)
 
